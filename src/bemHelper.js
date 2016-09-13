@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import classNames from 'classnames'
-import _ from 'lodash'
+import {forEach, forIn} from 'lodash'
 
 /*
   Util for bem manipulations
@@ -17,7 +17,7 @@ BemHelper = (function() {
   };
 
   function BemHelper(options) {
-    this.config = _.defaults({}, options, this.defaults);
+    this.config = Object.assign({}, this.defaults, options);
     this.cls = {};
     this.name = this.config.name;
     this.cls[this.name] = true;
@@ -25,7 +25,7 @@ BemHelper = (function() {
   }
 
   BemHelper.prototype.addArrMods = function(mods) {
-    return _.forEach(mods, (function(_this) {
+    return forEach(mods, (function(_this) {
       return function(m) {
         if (m) {
           return _this.cls[_this.name + "--" + (m.trim())] = true;
@@ -35,7 +35,7 @@ BemHelper = (function() {
   };
 
   BemHelper.prototype.addHashMods = function(mods) {
-    return _.forIn(mods, (function(_this) {
+    return forIn(mods, (function(_this) {
       return function(mod, modName) {
         if (mod) {
           return _this.cls[_this.name + "--" + modName] = true;
