@@ -1,27 +1,27 @@
-import React from 'react';
+import BemHelper from './bemHelper'
+import React, {Component as RComponent, PropTypes as PT} from 'react'
 
-const buttonStyles = {
-  border: '1px solid #eee',
-  borderRadius: 3,
-  backgroundColor: '#FFFFFF',
-  cursor: 'pointer',
-  fontSize: 15,
-  padding: '3px 10px',
-};
+export default function BemHOC (Component, name='') {
+  return class extends RComponent {
+    static defaultProps = {
+      className: '', 
+      mod: '', 
+      bemConfig: {}
+    }
+    render() {
+      const {className, mod, bemConfig, ...props} = this.props
 
-const Button = ({ children, onClick, style = {} }) => (
-  <button
-    style={{ ...buttonStyles, ...style }}
-    onClick={onClick}
-  >
-    {children}
-  </button>
-);
+      const cls = new BemHelper({
+        name,
+        stringMods: mod,
+        stringClasses: className,
+        ...bemConfig
+      }).toString()
 
-Button.propTypes = {
-  children: React.PropTypes.string.isRequired,
-  onClick: React.PropTypes.func,
-  style: React.PropTypes.object,
-};
-
-export default Button;
+      return <Component 
+                {...props} 
+                className={cls}
+                blockName={name} />
+    }
+  }
+}

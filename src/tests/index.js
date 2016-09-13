@@ -1,28 +1,45 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import Button from '../index';
 import { expect } from 'chai';
 import sinon from 'sinon';
 const { describe, it } = global;
+import bemHelper from '../bemHelper'
+import BemHOC from '../index'
 
-describe('Button', () => {
-  it('should show the given text', () => {
-    const text = 'The Text';
-    const wrapper = shallow(<Button>{text}</Button>);
-    expect(wrapper.text()).to.be.equal(text);
-  });
 
-  it('should handle the click event', () => {
-    const clickMe = sinon.stub();
-    // Here we do a JSDOM render. So, that's why we need to
-    // wrap this with a div.
-    const wrapper = mount(
-      <div>
-        <Button onClick={ clickMe }>ClickMe</Button>
-      </div>
-    );
+describe(`BemHOC`, () => {
+  // SETUP:
+  const cmpBaseClass = 'Cmp'
+  const Cmp = ({children, ...attrs}) => <div {...attrs}>{children}</div>
+  const BemCmp = BemHOC(Cmp, cmpBaseClass)
+  const modifiersSet = [
+    cmpBaseClass,
+    `${cmpBaseClass}--foo`,
+    `${cmpBaseClass}--bar`,
+    `${cmpBaseClass}--baz`
+  ]
 
-    wrapper.find('button').simulate('click');
-    expect(clickMe.callCount).to.be.equal(1);
-  });
-});
+  const isClsExist = (enzymeWrapper) => (...classes) => 
+    classes.forEach(cls => expect(enzymeWrapper.hasClass(cls)).to.be.true)
+
+  // TESTS:
+
+  it(`should provide a base class after wrapping a Component`, () => {
+    isClsExist(shallow(<BemCmp />))(cmpBaseClass)
+  })
+
+  it(`should provide correct modifier if "mod" property is set up`, () => {
+    isClsExist(shallow(<BemCmp mod="foo" />))(
+      cmpBaseClass,
+      `${cmpBaseClass}--foo`
+    )
+  })
+
+  it(`should provide several modifiers`, () => {
+    isClsExist(shallow(<BemCmp mod="foo,bar,baz" />))(...modifiersSet)
+  })
+  it(`should ignore spaces between modifier names`, () => {
+    isClsExist(shallow(<BemCmp mod=" foo, bar, baz " />))(...modifiersSet)
+  })
+
+})
