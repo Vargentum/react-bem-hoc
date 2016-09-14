@@ -1,21 +1,25 @@
 import React from 'react';
 import { storiesOf, action } from '@kadira/storybook';
-// import Button from '../index';
+import BemHOC from '../index'
 
-// storiesOf('Button', module)
-//   .add('default view', () => (
-//     <Button onClick={ action('button clicked') }>Hello</Button>
-//   ))
-//   .add('some emojies as the text', () => (
-//     <Button>😀 😎 👍 💯</Button>
-//   ))
-//   .add('custom styles', () => {
-//     const style = {
-//       fontSize: 20,
-//       textTransform: 'uppercase',
-//       color: '#FF8833',
-//     };
-//     return (
-//       <Button style={ style }>Hello</Button>
-//     );
-//   });
+const BemifiedButton = BemHOC('button', 'Button')
+const label = 'Click to see attached classes'
+
+storiesOf('BemHOC', module)
+  .add('without mods', () => (
+    <BemifiedButton onClick={action('Button')}>{label}</BemifiedButton>
+  ))
+  .add('one mod', () => (
+    <BemifiedButton onClick={action('Button Button--foo')} mod="foo">{label}</BemifiedButton>
+  ))
+  .add('several mods', () => (
+    <BemifiedButton 
+      onClick={action('Button Button--foo Button--bar Button--baz')} 
+      mod="foo, bar, baz">{label}</BemifiedButton>
+  ))
+  .add('several mods with classes', () => (
+    <BemifiedButton 
+      onClick={action('Button Button--foo Button--bar Button--baz oof rab zab')} 
+      mod="foo, bar, baz"
+      className="oof rab zab">{label}</BemifiedButton>
+  ))
