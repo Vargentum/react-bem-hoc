@@ -7,8 +7,8 @@
 
 This HOC provide support of bem flawored modifiers, like `block block--foo`. 
 Howto:
-* wrap your component: `const YourComponentBemified = BemHOC(YourComponent, 'YourComponentBaseClassName')`
-* provie mod property: `<YourComponentBemified mod="foo,bar" />`. Output className should look like `YourComponentBaseClassName YourComponentBaseClassName--foo YourComponentBaseClassName--bar`.
+* wrap your component: `const BemifiedCmp = BemHOC(SomeCmp, 'baseClass')`
+* provide a mod property: `<BemifiedCmp mod="foo,bar" />`. Output className should look like `baseClass baseClass--foo baseClass--bar`.
 * PROFIT
 
 [Example](https://Vargentum.github.io/react-bem-hoc)
