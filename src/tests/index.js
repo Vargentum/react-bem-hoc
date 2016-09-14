@@ -41,5 +41,9 @@ describe(`BemHOC`, () => {
   it(`should ignore spaces between modifier names`, () => {
     isClsExist(shallow(<BemCmp mod=" foo, bar, baz " />))(...modifiersSet)
   })
-
+  it(`should add content of 'className' prop`, () => {
+    isClsExist(shallow(<BemCmp mod=" foo,bar,baz" className="oof rab zab" />))(
+      ...[...modifiersSet, 'oof', 'rab', 'zab']
+    )
+  })
 })
